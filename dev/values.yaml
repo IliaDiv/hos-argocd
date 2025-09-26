@@ -24,7 +24,7 @@ frontend:
 
 backend:
   name: flask-backend
-  replicas: 1
+  replicas: 2
   flaskBackend:
     name: flask-backend
     image: irbis3/backend
