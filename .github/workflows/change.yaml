@@ -3,6 +3,7 @@ name: MyWorkflow
 on:
   repository_dispatch:
     types: [change-sha]
+    branches: [ test ]
 
 jobs:
   change-image-tag:
