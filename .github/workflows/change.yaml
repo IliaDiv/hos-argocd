@@ -14,7 +14,7 @@ jobs:
       - name: GitOps - Update Image Tag
         uses: adwert-it/gitops-image-update@v1
         with:
-            REPOSITORY_NAME: 'irbis3/hos-argocd'
+            REPOSITORY_NAME: 'IliaDiv/hos-argocd'
             ACCESS_TOKEN: ${{ secrets.PAT }}
             BRANCH: "master"
             VALUES_FILE_PATH: 'environment/dev/values.yaml'
@@ -22,3 +22,4 @@ jobs:
             TAG: '${{ github.sha }}'
 
           
+
