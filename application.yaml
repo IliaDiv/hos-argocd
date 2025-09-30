@@ -10,7 +10,7 @@ spec:
     targetRevision: HEAD
     ref: devValues
   - repoURL: https://github.com/IliaDiv/Home-Office-Store.git
-    targetRevision: HEAD
+    targetRevision: dev
     path: kubernetes/Home-Office-Store
     helm:
       valueFiles:
@@ -23,4 +23,5 @@ spec:
     - CreateNamespace=true
     automated:
       prune: true
-    # selfHeal: true    # stops argocd from changing the resources if changes were made manually by the user 
+      selfHeal: true    # stops argocd from changing the resources if changes were made manually by the user 
+      allowEmpty: true

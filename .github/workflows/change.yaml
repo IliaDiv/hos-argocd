@@ -1,0 +1,23 @@
+name: MyWorkflow
+
+on:
+  repository_dispatch:
+    types: [change-sha]
+
+jobs:
+  change-image-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        
+      - name: Run Image Tag Updater in the argocd repository
+        uses: somaz94/image-tag-updater@v1
+        with:
+          new_tag: ${{ github.event.client_payload.sha }}
+          target_path: environment/ 
+          file_pattern: "dev*/values.yaml"
+          branch: main
+          github_token: ${{ secrets.PAT }}
+          repo: IliaDiv/hos-argocd
+          

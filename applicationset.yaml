@@ -1,0 +1,66 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: test-hello-world-appset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: dev
+            argocdURL: https://github.com/IliaDiv/hos-argocd.git
+            argocdBranch: HEAD
+            codeURL: https://github.com/IliaDiv/Home-Office-Store.git
+            codeBranch: dev
+            syncPolicy:
+              syncOptions:
+              - CreateNamespace=true
+              automated:
+                prune: true
+                selfHeal: true
+                allowEmpty: true
+          - name: staging
+            argocdURL: https://github.com/IliaDiv/hos-argocd.git
+            argocdBranch: HEAD
+            codeURL: https://github.com/IliaDiv/Home-Office-Store.git
+            codeBranch: staging
+            syncPolicy:
+              syncOptions:
+              - CreateNamespace=true
+              automated:
+                prune: true
+                selfHeal: true
+                allowEmpty: true
+          - name: prod
+            argocdURL: https://github.com/IliaDiv/hos-argocd.git
+            argocdBranch: HEAD
+            codeURL: https://github.com/IliaDiv/Home-Office-Store.git
+            codeBranch: prod
+            syncPolicy:
+              syncOptions:
+              - CreateNamespace=true
+              automated:
+                prune: true
+                selfHeal: true
+                allowEmpty: true
+
+  template:
+    metadata:
+      name: hos-argocd-app
+    spec:
+      project: default
+      syncPolicy: {{.syncPolicy}}
+      source:
+        - repoURL: '{{.argocdURL}}'
+          targetRevision: '{{.argocdBranch}}'
+          path: HEAD
+          ref: values
+        - repoURL: '{{.codeURL}}'
+          targetRevision: '{{.codeBranch}}'
+          path: kubernetes/Home-Office-Store
+          helm:
+            valueFiles:
+            - $values/environment/{{.codeBranch}}/values.yaml
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: {{.codeBranch}}
