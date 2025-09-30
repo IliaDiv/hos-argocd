@@ -1,8 +1,8 @@
 name: MyWorkflow
 
 on:
-  push:
-    branches: [ main ]
+  repository_dispatch:
+    types: [change-sha]
 
 jobs:
   change-image-tag:
@@ -11,8 +11,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
         
-      - name: GitOps - Update Image Tag
-        uses: adwert-it/gitops-image-update@v1
       - name: GitOps - Update Image Tag
         uses: adwert-it/gitops-image-update@v1
         with:
