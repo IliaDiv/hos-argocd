@@ -13,14 +13,12 @@ jobs:
         
       - name: GitOps - Update Image Tag
         uses: adwert-it/gitops-image-update@v1
+      - name: GitOps - Update Image Tag
+        uses: adwert-it/gitops-image-update@v1
         with:
             REPOSITORY_NAME: 'IliaDiv/hos-argocd'
-            ACCESS_TOKEN: ${{ secrets.PAT }}
             BRANCH: "main"
             VALUES_FILE_PATH: 'environment/dev/values.yaml'
             VALUE_NAME: 'imageTag'
-            TAG: '${{ github.sha }}'
-
+            TAG: '${{ github.event.client_payload.sha }}'
           
-
-
