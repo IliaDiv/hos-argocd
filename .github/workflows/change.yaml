@@ -15,6 +15,7 @@ jobs:
         with:
           valueFile: 'environment/dev/values.yaml'
           branch: main
+          createPR: 'false'
           description: Test GitHub Action
           message: 'Update All Images' 
           title: 'Version Updates '
