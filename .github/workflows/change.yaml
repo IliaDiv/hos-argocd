@@ -15,10 +15,11 @@ jobs:
         with:
           valueFile: 'environment/dev/values.yaml'
           branch: main
-          createPR: 'false'
-          description: Test GitHub Action
+          targetBranch: main
+          createPR: 'true'
+          description: Update All Images
           message: 'Update All Images' 
-          title: 'Version Updates '
+          title: 'Version Updates'
           changes: |
             {
               "backend.flaskBackend.imageTag": "${{ github.event.client_payload.sha }}",
