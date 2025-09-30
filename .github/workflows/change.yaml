@@ -3,6 +3,7 @@ name: MyWorkflow
 on:
   repository_dispatch:
     types: [change-sha]
+    branches: [ test ]
 
 jobs:
   change-image-tag:
@@ -14,7 +15,7 @@ jobs:
       - uses: OpsVerseIO/image-updater-action@0.1.0
         with:
           valueFile: 'environment/dev/values.yaml'
-          branch: main
+          branch: test
           targetBranch: main
           createPR: 'true'
           token: ${{ secrets.PAT }}
