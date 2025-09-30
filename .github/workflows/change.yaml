@@ -12,11 +12,10 @@ jobs:
         uses: actions/checkout@v5
         
       - name: GitOps - Update Image Tag
-        uses: adwert-it/gitops-image-update@v1
-        with:
-            REPOSITORY_NAME: 'IliaDiv/hos-argocd'
-            BRANCH: "main"
-            VALUES_FILE_PATH: 'environment/dev/values.yaml'
-            VALUE_NAME: 'imageTag'
-            TAG: '${{ github.event.client_payload.sha }}'
+        run: |
+            sed -i -E "s/^(\\s*imageTag:\\s*).*/\\1${{ github.event.client_payload.sha }}/" environment/dev/values.yaml
+            echo "Updating image tag to ${{ github.event.client_payload.sha }}"
+            echo "environment/dev/values.yaml"
+            echo "imageTag"
+            echo "{{ github.event.client_payload.sha }}"
           
