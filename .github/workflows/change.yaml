@@ -17,6 +17,7 @@ jobs:
           branch: main
           targetBranch: main
           createPR: 'true'
+          token: ${{ secrets.PAT }}
           description: Update All Images
           message: 'Update All Images' 
           title: 'Version Updates'
