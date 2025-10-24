@@ -1,18 +1,20 @@
+---
 frontend:
   name: react-frontend
   replicas: 1
   reactFrontend:
     name: react-frontend
     image: irbis3/frontend
-    imageTag: e9a5d37fbe455c12df29d5bc2914db8581911913
-    port: 3000
+    imageTag: latest
+    port: 80
   resources:
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: "256Mi"
+      cpu: "100m"
     limits:
-      memory: 512Mi
-      cpu: 500m
+      memory: "512Mi"
+      cpu: "500m"
+
   service:
     name: frontend-svc
     type: ClusterIP
@@ -20,21 +22,23 @@ frontend:
       port: 80
       protocol: TCP
       targetPort: 80
+
 backend:
   name: flask-backend
   replicas: 1
   flaskBackend:
     name: flask-backend
     image: irbis3/backend
-    imageTag: e9a5d37fbe455c12df29d5bc2914db8581911913
+    imageTag: latest
     port: 5000
   resources:
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: "256Mi"
+      cpu: "100m"
     limits:
-      memory: 512Mi
-      cpu: 500m
+      memory: "512Mi"
+      cpu: "500m"
+
   service:
     name: backend-svc
     type: ClusterIP
@@ -42,6 +46,7 @@ backend:
       port: 5000
       protocol: TCP
       targetPort: 5000
+
 postgresql:
   name: postgresql
   replicas: 1
@@ -52,31 +57,34 @@ postgresql:
     port: 5432
   resources:
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: "256Mi"
+      cpu: "100m"
     limits:
-      memory: 512Mi
-      cpu: 500m
+      memory: "512Mi"
+      cpu: "500m"
+
   service:
     name: postgresql-svc
     type: ClusterIP
     clusterIP: None
     clusterIPs: None
+
 n8n:
   name: n8n
   replicas: 1
   n8n:
     name: n8n
     image: irbis3/n8n
-    imageTag: e9a5d37fbe455c12df29d5bc2914db8581911913
+    imageTag: latest
     port: 5678
   resources:
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: "256Mi"
+      cpu: "100m"
     limits:
-      memory: 512Mi
-      cpu: 500m
+      memory: "512Mi"
+      cpu: "500m"
+
   service:
     name: n8n-svc
     type: ClusterIP
@@ -84,6 +92,7 @@ n8n:
       port: 5678
       protocol: TCP
       targetPort: 5678
+
 n8nCm:
   name: n8n-config
   envn8n: |
@@ -106,17 +115,19 @@ n8nCm:
     N8N_DISABLE_PRODUCTION_MAIN_PROCESS=false
     N8N_BLOCK_ENV_ACCESS_IN_NODE=false
     N8N_RUNNERS_ENABLED=true
+
 cm:
   name: general-config
   db_name: postgres
   db_type: postgresdb
-  db_port: '5432'
+  db_port: "5432"
   db_host: postgresql-0.postgresql-svc
   backend_svc: /api
   n8n_webhook_url: http://n8n-svc:5678/webhook/chat
   cors_origins: http://localhost,http://localhost:3000,http://frontend-svc:3000,http://localhost:80,http://frontend-svc
   webhook_url: http://n8n-svc:5678
   n8n_editor_base_url: http://localhost:5678
+
 secrets:
   name: general-secrets
   data:
@@ -125,12 +136,11 @@ secrets:
     n8n_api_key: n8n-api-key-12345
     n8n_encryption_key: your-encryption-key
     open_ai_api_key: $OPENAI_API_KEY
+
 ingress:
   name: main-ingress
   enabled: true
   className: traefik
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
   rules:
     host: localhost
     frontendPaths:
