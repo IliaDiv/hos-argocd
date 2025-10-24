@@ -1,3 +1,4 @@
+---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -9,45 +10,31 @@ spec:
         elements:
           - name: dev
             namespace: dev
-            syncPolicy:
-              syncOptions:
-              - CreateNamespace=true
-              automated:
-                prune: true
-                selfHeal: true
-                allowEmpty: true
           - name: staging
             namespace: staging
-            syncPolicy:
-              syncOptions:
-              - CreateNamespace=true
-              automated:
-                prune: true
-                selfHeal: true
-                allowEmpty: true
           - name: prod
             namespace: prod
-            syncPolicy:
-              syncOptions:
-              - CreateNamespace=true
-              automated:
-                prune: true
-                selfHeal: true
-                allowEmpty: true
 
   template:
     metadata:
-      name: hos-argocd-app
+      name: hos-argocd-{{name}}
     spec:
       project: default
-      syncPolicy: {{.syncPolicy}}
+      syncPolicy:
+        automated:
+          enabled: true
+          prune: true
+          selfHeal: true
+          allowEmpty: true
+        syncOptions:
+        - CreateNamespace=true
       source:
-        - repoURL: https://github.com/IliaDiv/hos-argocd.git
-          targetRevision: HEAD
-          path: kubernetes/Home-Office-Store
-          helm:
-            valueFiles:
-            - $values/environment/{{.namespace}}/values.yaml
+        repoURL: https://github.com/IliaDiv/hos-argocd.git
+        targetRevision: HEAD
+        path: kubernetes/Home-Office-Store
+        helm:
+          valueFiles:
+            - ../../environment/{{namespace}}/values.yaml
       destination:
         server: https://kubernetes.default.svc
-        namespace: {{.namespace}}
+        namespace: '{{namespace}}'

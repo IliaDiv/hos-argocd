@@ -6,7 +6,7 @@ frontend:
     name: react-frontend
     image: irbis3/frontend
     imageTag: latest
-    port: 3000
+    port: 80
   resources:
     requests:
       memory: "256Mi"
@@ -19,9 +19,9 @@ frontend:
     name: frontend-svc
     type: ClusterIP
     ports:
-      port: 3000
+      port: 80
       protocol: TCP
-      targetPort: 3000
+      targetPort: 80
 
 backend:
   name: flask-backend
