@@ -4,7 +4,7 @@ frontend:
   reactFrontend:
     name: react-frontend
     image: irbis3/frontend
-    imageTag: c79f8fcac4e150ccf08d66b12fab17714d374663
+    imageTag: 5bcd1fcc36e98c452c8c460030449d61d19cc9ea
     port: 3000
   resources:
     requests:
@@ -26,7 +26,7 @@ backend:
   flaskBackend:
     name: flask-backend
     image: irbis3/backend
-    imageTag: c79f8fcac4e150ccf08d66b12fab17714d374663
+    imageTag: 5bcd1fcc36e98c452c8c460030449d61d19cc9ea
     port: 5000
   resources:
     requests:
@@ -68,7 +68,7 @@ n8n:
   n8n:
     name: n8n
     image: irbis3/n8n
-    imageTag: c79f8fcac4e150ccf08d66b12fab17714d374663
+    imageTag: 5bcd1fcc36e98c452c8c460030449d61d19cc9ea
     port: 5678
   resources:
     requests:
