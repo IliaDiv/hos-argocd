@@ -129,6 +129,8 @@ ingress:
   name: main-ingress
   enabled: true
   className: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
   rules:
     host: localhost
     frontendPaths:
