@@ -138,7 +138,7 @@ spec:
         {{- include "Home-Office-Store.frontend.resources" . | nindent 8 }}
         livenessProbe:
           httpGet:
-            path: /
+            path: /index.html
             port: {{ .Values.frontend.reactFrontend.port }}
           initialDelaySeconds: 30
           periodSeconds: 10
@@ -146,7 +146,7 @@ spec:
           failureThreshold: 3
         startupProbe:
           httpGet:
-            path: /
+            path: /index.html
             port: {{ .Values.frontend.reactFrontend.port }}
           initialDelaySeconds: 10
           periodSeconds: 5
