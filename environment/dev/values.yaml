@@ -17,12 +17,12 @@ frontend:
     name: frontend-svc
     type: ClusterIP
     ports:
-      port: 3000
+      port: 80
       protocol: TCP
-      targetPort: 3000
+      targetPort: 80
 backend:
   name: flask-backend
-  replicas: 2
+  replicas: 1
   flaskBackend:
     name: flask-backend
     image: irbis3/backend

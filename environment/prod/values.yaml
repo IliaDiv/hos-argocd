@@ -4,8 +4,9 @@ frontend:
   replicas: 1
   reactFrontend:
     name: react-frontend
-    image: irbis3/frontend:k
-    port: 3000
+    image: irbis3/frontend
+    imageTag: latest
+    port: 80
   resources:
     requests:
       memory: "256Mi"
@@ -18,9 +19,9 @@ frontend:
     name: frontend-svc
     type: ClusterIP
     ports:
-      port: 3000
+      port: 80
       protocol: TCP
-      targetPort: 3000
+      targetPort: 80
 
 backend:
   name: flask-backend
@@ -28,6 +29,7 @@ backend:
   flaskBackend:
     name: flask-backend
     image: irbis3/backend
+    imageTag: latest
     port: 5000
   resources:
     requests:
@@ -72,6 +74,7 @@ n8n:
   n8n:
     name: n8n
     image: irbis3/n8n
+    imageTag: latest
     port: 5678
   resources:
     requests:
