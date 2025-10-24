@@ -5,7 +5,7 @@ frontend:
   reactFrontend:
     name: react-frontend
     image: irbis3/frontend
-    imageTag: latest
+    imageTag: e9a5d37fbe455c12df29d5bc2914db8581911913
     port: 80
   resources:
     requests:
