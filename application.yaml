@@ -5,16 +5,13 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  sources:
-  - repoURL: https://github.com/IliaDiv/hos-argocd.git
-    targetRevision: HEAD
-    ref: devValues
-  - repoURL: https://github.com/IliaDiv/Home-Office-Store.git
-    targetRevision: dev
+  source:
+    repoURL: https://github.com/IliaDiv/hos-argocd.git
+    targetRevision: test
     path: kubernetes/Home-Office-Store
     helm:
       valueFiles:
-        - $devValues/dev/values.yaml
+        - ../../environment/dev/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: app
