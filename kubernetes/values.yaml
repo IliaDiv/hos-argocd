@@ -4,7 +4,8 @@ frontend:
   replicas: 1
   reactFrontend:
     name: react-frontend
-    image: irbis3/frontend:k
+    image: irbis3/frontend
+    imageTag: latest
     port: 80
   resources:
     requests:
@@ -28,6 +29,7 @@ backend:
   flaskBackend:
     name: flask-backend
     image: irbis3/backend
+    imageTag: latest
     port: 5000
   resources:
     requests:
@@ -51,6 +53,7 @@ postgresql:
   postgresql:
     name: postgresql
     image: postgres
+    imageTag: latest
     port: 5432
   resources:
     requests:
@@ -72,6 +75,7 @@ n8n:
   n8n:
     name: n8n
     image: irbis3/n8n
+    imageTag: latest
     port: 5678
   resources:
     requests:
@@ -96,6 +100,7 @@ n8nCm:
     N8N_DEFAULT_BINARY_DATA_MODE=filesystem
     N8N_DEFAULT_LOCALE=en
     N8N_METRICS=true
+    N8N_METRICS_INCLUDE_DEFAULT=true
     N8N_DIAGNOSTICS_ENABLED=false
     EXECUTIONS_DATA_PRUNE=true
     EXECUTIONS_DATA_MAX_AGE=168
