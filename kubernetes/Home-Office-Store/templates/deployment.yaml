@@ -222,7 +222,7 @@ spec:
               key: open_ai_api_key
         envFrom:
         - configMapRef:
-            name: {{ .Values.n8nCm.name }}
+            name: {{ .Values.n8nCm.envn8n.name }}
         {{- include "Home-Office-Store.n8n.resources" . | nindent 8 }}
         livenessProbe:
           httpGet:
