@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: {{.Values.n8nCm.envn8n.name}}
 data:
-  {{ .Values.n8nCm.envn8n | nindent 2 }}
+  {{ .Values.n8nCm.envn8n | toYaml | nindent 2 }}
 
 ---
 # General ConfigMap
