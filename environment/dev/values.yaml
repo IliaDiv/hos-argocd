@@ -90,7 +90,6 @@ n8nCm:
     DB_TYPE=postgresdb
     N8N_DEFAULT_BINARY_DATA_MODE=filesystem
     N8N_DEFAULT_LOCALE=en
-    N8N_METRICS=true
     N8N_METRICS_INCLUDE_DEFAULT_METRICS=true
     N8N_METRICS_INCLUDE_CACHE_METRICS=true
     N8N_METRICS_INCLUDE_MESSAGE_EVENT_BUS_METRICS=true
@@ -99,20 +98,14 @@ n8nCm:
     N8N_METRICS_INCLUDE_API_STATUS_CODE_LABEL=true
     N8N_METRICS_QUEUE_METRICS_INTERVAL=10
     N8N_DIAGNOSTICS_ENABLED=true
-    EXECUTIONS_DATA_PRUNE=true
-    EXECUTIONS_DATA_MAX_AGE=168
     N8N_API_AUTH_ENABLED=true
     N8N_SKIP_SETUP=true
     N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
     N8N_USER_MANAGEMENT_DISABLED=true
-    N8N_PERSONALIZATION_ENABLED=false
     N8N_HOST=0.0.0.0
     N8N_PORT=5678
     N8N_PROTOCOL=http
-    N8N_DISABLE_UI=false
-    N8N_DISABLE_PRODUCTION_MAIN_PROCESS=false
     N8N_BLOCK_ENV_ACCESS_IN_NODE=false
-    N8N_RUNNERS_ENABLED=true
 cm:
   name: general-config
   db_name: postgres
@@ -147,3 +140,10 @@ ingress:
     n8nPaths:
       path: /webhook/chat
       pathType: Prefix
+
+grafana:
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+
