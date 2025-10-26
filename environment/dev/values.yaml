@@ -72,11 +72,11 @@ n8n:
     port: 5678
   resources:
     requests:
-      memory: 256Mi
-      cpu: 100m
-    limits:
       memory: 512Mi
-      cpu: 500m
+      cpu: 250m
+    limits:
+      memory: 1024Mi
+      cpu: 1000m
   service:
     name: n8n-svc
     type: ClusterIP
