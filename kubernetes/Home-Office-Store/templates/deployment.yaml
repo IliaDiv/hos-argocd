@@ -216,7 +216,7 @@ spec:
               name: {{ .Values.secrets.name }}
               key: n8n_encryption_key
         - name: N8N_METRICS
-          value: true
+          value: "true"
         - name: OPENAI_API_KEY
           valueFrom:
             secretKeyRef:
