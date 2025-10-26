@@ -2,10 +2,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{.Values.n8nCm.name}}
+  name: {{.Values.n8nCm.envn8n.name}}
 data:
-  envn8n: |
-    {{ .Values.n8nCm.envn8n | nindent 4 }}
+  {{ .Values.n8nCm.envn8n | nindent 2 }}
 
 ---
 # General ConfigMap
