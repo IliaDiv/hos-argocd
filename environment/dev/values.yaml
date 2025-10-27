@@ -135,8 +135,35 @@ ingress:
       pathType: Prefix
 
 grafana:
-  sidecar:
-    dashboards:
-      enabled: true
-      label: grafana_dashboard
+  defaultDashboardsEnabled: false
+  dashboardProviders:
+   dashboardproviders.yaml:
+     apiVersion: 1
+     providers:
+     - name: 'default'
+       orgId: 1
+       folder: ''
+       type: file
+       disableDeletion: false
+       editable: true
+       options:
+         path: /var/lib/grafana/dashboards/default
+
+  dashboardsConfigMaps:
+    default: "grafana-hos-dashboard"
+
+kubelet:
+  serviceMonitor:
+    interval: "100s" # Prometheus scrape interval
+
+prometheus:
+  spec:
+    ruleSelector:
+      matchExpressions:
+        - key: prometheus
+          operator: In
+          values:
+            - hos
+
+
 
