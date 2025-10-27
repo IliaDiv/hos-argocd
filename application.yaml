@@ -14,7 +14,7 @@ spec:
         - ../../environment/dev/values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: app
+    namespace: dev
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
