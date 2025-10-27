@@ -4,7 +4,7 @@ frontend:
   reactFrontend:
     name: react-frontend
     image: irbis3/frontend
-    imageTag: 387c1f82f5eda979e8c5ee7c1556a3c2d43e62e3
+    imageTag: c24c2730fa72fef28eef70292a353c569b28d29b
     port: 80
   resources:
     requests:
@@ -26,7 +26,7 @@ backend:
   flaskBackend:
     name: flask-backend
     image: irbis3/backend
-    imageTag: 387c1f82f5eda979e8c5ee7c1556a3c2d43e62e3
+    imageTag: c24c2730fa72fef28eef70292a353c569b28d29b
     port: 5000
   resources:
     requests:
@@ -68,7 +68,7 @@ n8n:
   n8n:
     name: n8n
     image: irbis3/n8n
-    imageTag: 387c1f82f5eda979e8c5ee7c1556a3c2d43e62e3
+    imageTag: c24c2730fa72fef28eef70292a353c569b28d29b
     port: 5678
   resources:
     requests:
@@ -87,18 +87,18 @@ n8n:
 n8nCm:
   envn8n:
     name: n8n-config
-    DB_TYPE: "postgresdb"
-    N8N_DEFAULT_BINARY_DATA_MODE: "filesystem"
-    N8N_DEFAULT_LOCALE: "en"
-    N8N_METRICS: "true"
-    N8N_METRICS_INCLUDE_DEFAULT_METRICS: "true"
-    N8N_METRICS_INCLUDE_CACHE_METRICS: "true"
-    N8N_METRICS_INCLUDE_MESSAGE_EVENT_BUS_METRICS: "true"
-    N8N_METRICS_INCLUDE_WORKFLOW_ID_LABEL: "true"
-    N8N_METRICS_INCLUDE_API_METHOD_LABEL: "true"
-    N8N_METRICS_INCLUDE_API_STATUS_CODE_LABEL: "true"
-    N8N_METRICS_QUEUE_METRICS_INTERVAL: "10"
-    N8N_DIAGNOSTICS_ENABLED: "true"
+    DB_TYPE: postgresdb
+    N8N_DEFAULT_BINARY_DATA_MODE: filesystem
+    N8N_DEFAULT_LOCALE: en
+    N8N_METRICS: 'true'
+    N8N_METRICS_INCLUDE_DEFAULT_METRICS: 'true'
+    N8N_METRICS_INCLUDE_CACHE_METRICS: 'true'
+    N8N_METRICS_INCLUDE_MESSAGE_EVENT_BUS_METRICS: 'true'
+    N8N_METRICS_INCLUDE_WORKFLOW_ID_LABEL: 'true'
+    N8N_METRICS_INCLUDE_API_METHOD_LABEL: 'true'
+    N8N_METRICS_INCLUDE_API_STATUS_CODE_LABEL: 'true'
+    N8N_METRICS_QUEUE_METRICS_INTERVAL: '10'
+    N8N_DIAGNOSTICS_ENABLED: 'true'
 cm:
   name: general-config
   db_name: postgres
@@ -133,37 +133,8 @@ ingress:
     n8nPaths:
       path: /webhook/chat
       pathType: Prefix
-
 grafana:
-  defaultDashboardsEnabled: false
-  dashboardProviders:
-   dashboardproviders.yaml:
-     apiVersion: 1
-     providers:
-     - name: 'default'
-       orgId: 1
-       folder: ''
-       type: file
-       disableDeletion: false
-       editable: true
-       options:
-         path: /var/lib/grafana/dashboards/default
-
-  dashboardsConfigMaps:
-    default: "grafana-hos-dashboard"
-
-kubelet:
-  serviceMonitor:
-    interval: "100s" # Prometheus scrape interval
-
-prometheus:
-  spec:
-    ruleSelector:
-      matchExpressions:
-        - key: prometheus
-          operator: In
-          values:
-            - hos
-
-
-
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
