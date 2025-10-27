@@ -4,7 +4,7 @@ frontend:
   reactFrontend:
     name: react-frontend
     image: irbis3/frontend
-    imageTag: a36a503c9f25314e3fd53fec36be81364d97d0ea
+    imageTag: c24c2730fa72fef28eef70292a353c569b28d29b
     port: 80
   resources:
     requests:
@@ -26,7 +26,7 @@ backend:
   flaskBackend:
     name: flask-backend
     image: irbis3/backend
-    imageTag: a36a503c9f25314e3fd53fec36be81364d97d0ea
+    imageTag: c24c2730fa72fef28eef70292a353c569b28d29b
     port: 5000
   resources:
     requests:
@@ -68,7 +68,7 @@ n8n:
   n8n:
     name: n8n
     image: irbis3/n8n
-    imageTag: a36a503c9f25314e3fd53fec36be81364d97d0ea
+    imageTag: c24c2730fa72fef28eef70292a353c569b28d29b
     port: 5678
   resources:
     requests:
@@ -87,18 +87,18 @@ n8n:
 n8nCm:
   envn8n:
     name: n8n-config
-    DB_TYPE: "postgresdb"
-    N8N_DEFAULT_BINARY_DATA_MODE: "filesystem"
-    N8N_DEFAULT_LOCALE: "en"
-    N8N_METRICS: "true"
-    N8N_METRICS_INCLUDE_DEFAULT_METRICS: "true"
-    N8N_METRICS_INCLUDE_CACHE_METRICS: "true"
-    N8N_METRICS_INCLUDE_MESSAGE_EVENT_BUS_METRICS: "true"
-    N8N_METRICS_INCLUDE_WORKFLOW_ID_LABEL: "true"
-    N8N_METRICS_INCLUDE_API_METHOD_LABEL: "true"
-    N8N_METRICS_INCLUDE_API_STATUS_CODE_LABEL: "true"
-    N8N_METRICS_QUEUE_METRICS_INTERVAL: "10"
-    N8N_DIAGNOSTICS_ENABLED: "true"
+    DB_TYPE: postgresdb
+    N8N_DEFAULT_BINARY_DATA_MODE: filesystem
+    N8N_DEFAULT_LOCALE: en
+    N8N_METRICS: 'true'
+    N8N_METRICS_INCLUDE_DEFAULT_METRICS: 'true'
+    N8N_METRICS_INCLUDE_CACHE_METRICS: 'true'
+    N8N_METRICS_INCLUDE_MESSAGE_EVENT_BUS_METRICS: 'true'
+    N8N_METRICS_INCLUDE_WORKFLOW_ID_LABEL: 'true'
+    N8N_METRICS_INCLUDE_API_METHOD_LABEL: 'true'
+    N8N_METRICS_INCLUDE_API_STATUS_CODE_LABEL: 'true'
+    N8N_METRICS_QUEUE_METRICS_INTERVAL: '10'
+    N8N_DIAGNOSTICS_ENABLED: 'true'
 cm:
   name: general-config
   db_name: postgres
@@ -133,10 +133,8 @@ ingress:
     n8nPaths:
       path: /webhook/chat
       pathType: Prefix
-
 grafana:
   sidecar:
     dashboards:
       enabled: true
       label: grafana_dashboard
-
