@@ -8,7 +8,6 @@ metadata:
     app: backend
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.backend.replicas }}
   selector:
     matchLabels:
       app: backend
@@ -111,7 +110,6 @@ metadata:
     app: frontend
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.frontend.replicas }}
   selector:
     matchLabels:
       app: frontend
@@ -163,7 +161,6 @@ metadata:
     app: n8n
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.n8n.replicas }}
   selector:
     matchLabels:
       app: n8n
