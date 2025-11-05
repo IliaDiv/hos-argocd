@@ -14,7 +14,24 @@ jobs:
         
       - uses: OpsVerseIO/image-updater-action@0.1.0
         with:
-          valueFile: 'environment/dev/values.yaml'
+          valueFile: 'environment/dev/local-values.yaml'
+          branch: test
+          targetBranch: main
+          createPR: 'true'
+          token: ${{ secrets.PAT }}
+          description: Update All Images
+          message: 'Update All Images' 
+          title: 'Version Updates'
+          changes: |
+            {
+              "backend.flaskBackend.imageTag": "${{ github.event.client_payload.sha }}",
+              "frontend.reactFrontend.imageTag": "${{ github.event.client_payload.sha }}",
+              "n8n.n8n.imageTag": "${{ github.event.client_payload.sha }}"
+            }
+
+      - uses: OpsVerseIO/image-updater-action@0.1.0
+        with:
+          valueFile: 'environment/dev/eks-values.yaml'
           branch: test
           targetBranch: main
           createPR: 'true'
