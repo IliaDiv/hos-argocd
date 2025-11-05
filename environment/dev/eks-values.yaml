@@ -1,6 +1,9 @@
+##############################################################################################
+# Frontend
+##############################################################################################
+
 frontend:
   name: react-frontend
-  replicas: 1
   reactFrontend:
     name: react-frontend
     image: irbis3/frontend
@@ -20,9 +23,13 @@ frontend:
       port: 80
       protocol: TCP
       targetPort: 80
+
+##############################################################################################
+# Backend
+##############################################################################################
+
 backend:
   name: flask-backend
-  replicas: 1
   flaskBackend:
     name: flask-backend
     image: irbis3/backend
@@ -42,29 +49,13 @@ backend:
       port: 5000
       protocol: TCP
       targetPort: 5000
-postgresql:
-  name: postgresql
-  replicas: 1
-  postgresql:
-    name: postgresql
-    image: postgres
-    imageTag: latest
-    port: 5432
-  resources:
-    requests:
-      memory: 256Mi
-      cpu: 100m
-    limits:
-      memory: 512Mi
-      cpu: 500m
-  service:
-    name: postgresql-svc
-    type: ClusterIP
-    clusterIP: None
-    clusterIPs: None
+
+##############################################################################################
+# n8n
+##############################################################################################
+
 n8n:
   name: n8n
-  replicas: 1
   n8n:
     name: n8n
     image: irbis3/n8n
@@ -84,6 +75,11 @@ n8n:
       port: 5678
       protocol: TCP
       targetPort: 5678
+    
+##############################################################################################
+# n8n-CM
+##############################################################################################
+
 n8nCm:
   envn8n:
     name: n8n-config
@@ -99,6 +95,11 @@ n8nCm:
     N8N_METRICS_INCLUDE_API_STATUS_CODE_LABEL: "true"
     N8N_METRICS_QUEUE_METRICS_INTERVAL: "10"
     N8N_DIAGNOSTICS_ENABLED: "true"
+    
+##############################################################################################
+# CM
+##############################################################################################
+
 cm:
   name: general-config
   db_name: postgres
@@ -110,6 +111,11 @@ cm:
   cors_origins: http://localhost,http://localhost:3000,http://frontend-svc:3000,http://localhost:80,http://frontend-svc
   webhook_url: http://n8n-svc:5678
   n8n_editor_base_url: http://localhost:5678
+    
+##############################################################################################
+# Secrets
+##############################################################################################
+
 secrets:
   name: general-secrets
   data:
@@ -118,10 +124,17 @@ secrets:
     n8n_api_key: n8n-api-key-12345
     n8n_encryption_key: your-encryption-key
     open_ai_api_key: $OPENAI_API_KEY
+    
+##############################################################################################
+# Ingress
+##############################################################################################
+
 ingress:
+  type: lbc
   name: main-ingress
+  certARN: arn:aws:acm:us-east-1:337909746080:certificate/f18f4294-80b2-4322-ba30-314855addfd2
   enabled: true
-  className: traefik
+  className: alb
   rules:
     host: localhost
     frontendPaths:
@@ -133,6 +146,10 @@ ingress:
     n8nPaths:
       path: /webhook/chat
       pathType: Prefix
+    
+##############################################################################################
+# Grafana
+##############################################################################################
 
 grafana:
   defaultDashboardsEnabled: false
@@ -152,19 +169,35 @@ grafana:
   dashboardsConfigMaps:
     default: "grafana-hos-dashboard"
 
+##############################################################################################
+# Kubelet
+##############################################################################################
+
 kubelet:
   serviceMonitor:
     interval: "30s" # Prometheus scrape interval
+    
+##############################################################################################
+# PrometheusOperator
+##############################################################################################
 
 prometheusOperator:
   serviceMonitor:
     interval: "30s"
+    
+##############################################################################################
+# Prometheus
+##############################################################################################
 
 prometheus:
   spec:
     ruleSelector:
       matchLabels:
         prometheus: hos
+    
+##############################################################################################
+# AlertManager
+##############################################################################################
 
 alertmanager: 
   enabled: true 

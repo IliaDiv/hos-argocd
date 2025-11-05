@@ -1,5 +1,8 @@
 ---
+##############################################################################################
 # PostgreSQL StatefulSet
+##############################################################################################
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
 apiVersion: apps/v1
 kind: StatefulSet 
 metadata:

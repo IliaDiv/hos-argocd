@@ -1,5 +1,9 @@
 ---
+##############################################################################################
 # Backend Service
+##############################################################################################
+
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,7 +23,11 @@ spec:
   type: {{ .Values.backend.service.type }}
 
 ---
+##############################################################################################
 # Frontend Service
+##############################################################################################
+
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -39,7 +47,11 @@ spec:
   type: {{ .Values.frontend.service.type }}
 
 ---
+##############################################################################################
 # N8N Service
+##############################################################################################
+
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -59,7 +71,11 @@ spec:
   type: {{ .Values.n8n.service.type }}
 
 ---
+##############################################################################################
 # PostgreSQL Service
+##############################################################################################
+
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -75,3 +91,4 @@ spec:
     db: postgresql
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
   type: {{ .Values.postgresql.service.type }}
+---
