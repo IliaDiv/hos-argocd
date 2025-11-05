@@ -1,0 +1,80 @@
+---
+##############################################################################################
+# Backend Service
+##############################################################################################
+
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.backend.service.name }}
+  labels:
+    app: backend
+    {{- include "Home-Office-Store.labels" . | nindent 4 }}
+    service.beta.kubernetes.io/aws-load-balancer-type: external # External to use the LBC
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip # Routes directly to pods
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internal # Private LB
+spec:
+  ports:
+  - name: http
+    port: {{ .Values.backend.service.ports.port }}
+    protocol: {{ .Values.backend.service.ports.protocol }}
+    targetPort: {{ .Values.backend.service.ports.targetPort }}
+  selector:
+    app: backend
+    {{- include "Home-Office-Store.labels" . | nindent 4 }}
+  type: {{ .Values.backend.service.type }}
+
+---
+##############################################################################################
+# Frontend Service
+##############################################################################################
+
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.frontend.service.name }}
+  labels:
+    app: frontend
+    {{- include "Home-Office-Store.labels" . | nindent 4 }}
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing # Public LB
+spec:
+  ports:
+  - name: http
+    port: {{ .Values.frontend.service.ports.port }}
+    protocol: {{ .Values.frontend.service.ports.protocol }}
+    targetPort: {{ .Values.frontend.service.ports.targetPort }}
+  selector:
+    app: frontend
+    {{- include "Home-Office-Store.labels" . | nindent 4 }}
+  type: {{ .Values.frontend.service.type }}
+
+---
+##############################################################################################
+# N8N Service
+##############################################################################################
+
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.n8n.service.name }}
+  labels:
+    app: n8n
+    {{- include "Home-Office-Store.labels" . | nindent 4 }}
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internal # Private LB
+spec:
+  ports:
+  - name: http
+    port: {{ .Values.n8n.service.ports.port }}
+    protocol: {{ .Values.n8n.service.ports.protocol }}
+    targetPort: {{ .Values.n8n.service.ports.targetPort }}
+  selector:
+    app: n8n
+    {{- include "Home-Office-Store.labels" . | nindent 4 }}
+  type: {{ .Values.n8n.service.type }}

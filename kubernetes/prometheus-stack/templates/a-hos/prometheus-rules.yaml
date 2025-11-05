@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: hos-prometheus-rules
+  labels:
+    prometheus: hos
+    release: prometheus-stack
+spec:
+  groups:
+  - name: cpu_usage
+    rules:
+    - alert: HighCPU_Throttling
+      annotations:
+        description: "cpu usage on node $labels.instance , pod {{`{{`}} $labels.pod {{`}}`}} in {{`{{`}} $labels.namespace {{`}}`}} currently at {{`{{`}} $value {{`}}`}}% and is under pressure"
+        summary: "cpu usage is under pressure, system may become unstable"
+      expr:
+        rate(container_cpu_cfs_throttled_periods_total{container="react-frontend", namespace=~"dev|prod|staging"}[5m]) / rate(container_cpu_cfs_periods_total{container="react-frontend", namespace=~"dev|prod|staging"}[5m]) * 100 > 80
+      for: 20s
+      labels:
+        severity: warning

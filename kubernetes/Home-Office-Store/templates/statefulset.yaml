@@ -1,5 +1,8 @@
 ---
+##############################################################################################
 # PostgreSQL StatefulSet
+##############################################################################################
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
 apiVersion: apps/v1
 kind: StatefulSet 
 metadata:
@@ -9,7 +12,6 @@ metadata:
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
 spec:
   serviceName: {{ .Values.postgresql.service.name }}
-  replicas: {{ .Values.postgresql.replicas }}
   selector:
     matchLabels:
       db: postgresql
