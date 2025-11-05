@@ -14,7 +14,7 @@ jobs:
         
       - uses: OpsVerseIO/image-updater-action@0.1.0
         with:
-          valueFile: 'environment/dev/local-values.yaml'
+          valueFile: 'environment/dev/local/values.yaml'
           branch: test
           targetBranch: main
           createPR: 'true'
@@ -31,7 +31,7 @@ jobs:
 
       - uses: OpsVerseIO/image-updater-action@0.1.0
         with:
-          valueFile: 'environment/dev/eks-values.yaml'
+          valueFile: 'environment/dev/eks/values.yaml'
           branch: test
           targetBranch: main
           createPR: 'true'
