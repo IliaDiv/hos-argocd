@@ -11,10 +11,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+      
+      - name: Debug - Verify files exist
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Repository structure:"
+          ls -R
+          echo "Checking for values files:"
+          test -f environment/dev/local/values.yaml && echo "✓ local/values.yaml exists" || echo "✗ local/values.yaml NOT FOUND"
+          test -f environment/dev/eks/values.yaml && echo "✓ eks/values.yaml exists" || echo "✗ eks/values.yaml NOT FOUND"
         
       - uses: OpsVerseIO/image-updater-action@0.1.0
         with:
-          valueFile: 'environment/dev/local-values.yaml'
+          valueFile: 'environment/dev/local/values.yaml'
           branch: test
           targetBranch: main
           createPR: 'true'
@@ -31,7 +41,7 @@ jobs:
 
       - uses: OpsVerseIO/image-updater-action@0.1.0
         with:
-          valueFile: 'environment/dev/eks-values.yaml'
+          valueFile: 'environment/dev/eks/values.yaml'
           branch: test
           targetBranch: main
           createPR: 'true'
