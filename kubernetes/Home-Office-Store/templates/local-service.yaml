@@ -21,6 +21,7 @@ spec:
     app: backend
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
   type: {{ .Values.backend.service.type }}
+{{- end }}
 
 ---
 ##############################################################################################
@@ -45,6 +46,7 @@ spec:
     app: frontend
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
   type: {{ .Values.frontend.service.type }}
+{{- end }}
 
 ---
 ##############################################################################################
@@ -69,6 +71,7 @@ spec:
     app: n8n
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
   type: {{ .Values.n8n.service.type }}
+{{- end }}
 
 ---
 ##############################################################################################
@@ -91,4 +94,5 @@ spec:
     db: postgresql
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
   type: {{ .Values.postgresql.service.type }}
+{{- end }}
 ---

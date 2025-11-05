@@ -2,6 +2,7 @@
 # ALB Controller
 ##############################################################################################
 
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -42,3 +43,4 @@ spec:
             name: {{ .Values.n8n.service.name }}
             port:
               number: {{ .Values.n8n.service.ports.port }}
+{{- end }}

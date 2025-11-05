@@ -44,3 +44,4 @@ spec:
               name: {{ .Values.secrets.name }}
               key: db_password
         {{- include "Home-Office-Store.postgresql.resources" . | nindent 8 }}
+{{- end }}
