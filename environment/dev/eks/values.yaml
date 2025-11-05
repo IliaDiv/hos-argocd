@@ -75,7 +75,7 @@ n8n:
       port: 5678
       protocol: TCP
       targetPort: 5678
-    
+
 ##############################################################################################
 # n8n-CM
 ##############################################################################################
@@ -95,7 +95,7 @@ n8nCm:
     N8N_METRICS_INCLUDE_API_STATUS_CODE_LABEL: "true"
     N8N_METRICS_QUEUE_METRICS_INTERVAL: "10"
     N8N_DIAGNOSTICS_ENABLED: "true"
-    
+
 ##############################################################################################
 # CM
 ##############################################################################################
@@ -111,7 +111,7 @@ cm:
   cors_origins: http://localhost,http://localhost:3000,http://frontend-svc:3000,http://localhost:80,http://frontend-svc
   webhook_url: http://n8n-svc:5678
   n8n_editor_base_url: http://localhost:5678
-    
+
 ##############################################################################################
 # Secrets
 ##############################################################################################
@@ -124,7 +124,7 @@ secrets:
     n8n_api_key: n8n-api-key-12345
     n8n_encryption_key: your-encryption-key
     open_ai_api_key: $OPENAI_API_KEY
-    
+
 ##############################################################################################
 # Ingress
 ##############################################################################################
@@ -146,7 +146,7 @@ ingress:
     n8nPaths:
       path: /webhook/chat
       pathType: Prefix
-    
+
 ##############################################################################################
 # Grafana
 ##############################################################################################
@@ -154,17 +154,17 @@ ingress:
 grafana:
   defaultDashboardsEnabled: false
   dashboardProviders:
-   dashboardproviders.yaml:
-     apiVersion: 1
-     providers:
-     - name: 'default'
-       orgId: 1
-       folder: ''
-       type: file
-       disableDeletion: false
-       editable: true
-       options:
-         path: /var/lib/grafana/dashboards/default
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: 'default'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
 
   dashboardsConfigMaps:
     default: "grafana-hos-dashboard"
@@ -176,7 +176,7 @@ grafana:
 kubelet:
   serviceMonitor:
     interval: "30s" # Prometheus scrape interval
-    
+
 ##############################################################################################
 # PrometheusOperator
 ##############################################################################################
@@ -184,7 +184,7 @@ kubelet:
 prometheusOperator:
   serviceMonitor:
     interval: "30s"
-    
+
 ##############################################################################################
 # Prometheus
 ##############################################################################################
@@ -194,25 +194,25 @@ prometheus:
     ruleSelector:
       matchLabels:
         prometheus: hos
-    
+
 ##############################################################################################
 # AlertManager
 ##############################################################################################
 
-alertmanager: 
-  enabled: true 
-  config: 
-    route: 
-      receiver: 'email' # default receiver 
-      group_by: ['alertname'] # group name 
-      group_wait: 10s # wait for potentially more alerts from the same group before sending the message 
-      group_interval: 10s 
-      repeat_interval: 1h # 1 hour cooldown 
-      routes: # create more receivers here, the settings override the default receiver's settings 
-        - match: 
-            alertname: HighCPU_Throttling # CHANGE THIS (the name of the alert to match) 
-          receiver: 'email' # alerts matching this will be sent to the reciever 'test' 
-          repeat_interval: 5m # overrides parent's cooldown settings 
+alertmanager:
+  enabled: true
+  config:
+    route:
+      receiver: 'email' # default receiver
+      group_by: ['alertname'] # group name
+      group_wait: 10s # wait for potentially more alerts from the same group before sending the message
+      group_interval: 10s
+      repeat_interval: 1h # 1 hour cooldown
+      routes: # create more receivers here, the settings override the default receiver's settings
+        - match:
+            alertname: HighCPU_Throttling # CHANGE THIS (the name of the alert to match)
+          receiver: 'email' # alerts matching this will be sent to the reciever 'test'
+          repeat_interval: 5m # overrides parent's cooldown settings
     receivers:
       - name: email
         email_configs:
@@ -223,7 +223,3 @@ alertmanager:
             auth_password: 'longpassword'   # Gmail App Password, NOT your regular password
             require_tls: true         # enforce TLS
             text: "Alert {{ .CommonLabels.alertname }} fired on {{ .CommonLabels.instance }}!"
-
-
-
-
