@@ -81,25 +81,3 @@ spec:
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
   type: {{ .Values.n8n.service.type }}
 {{- end }}
-
----
-##############################################################################################
-# PostgreSQL Service
-##############################################################################################
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Values.postgresql.service.name }}
-  labels:
-    db: postgresql
-    {{- include "Home-Office-Store.labels" . | nindent 4 }}
-spec:
-  clusterIP: {{ .Values.postgresql.service.clusterIP }}
-  clusterIPs:
-  - {{ .Values.postgresql.service.clusterIPs }}
-  selector:
-    db: postgresql
-    {{- include "Home-Office-Store.labels" . | nindent 4 }}
-  type: {{ .Values.postgresql.service.type }}
----

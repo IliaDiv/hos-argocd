@@ -132,11 +132,6 @@ spec:
         ports:
         - containerPort: {{ .Values.frontend.reactFrontend.port }}
         env:
-        # - name: NEXT_PUBLIC_API_URL
-        #   valueFrom:
-        #     configMapKeyRef:
-        #       name: {{ .Values.cm.name }}
-        #       key: backend_svc
         - name: NODE_ENV
           value: development
         {{- include "Home-Office-Store.frontend.resources" . | nindent 8 }}

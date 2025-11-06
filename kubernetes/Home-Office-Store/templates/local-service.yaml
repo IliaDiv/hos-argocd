@@ -78,7 +78,7 @@ spec:
 # PostgreSQL Service
 ##############################################################################################
 
-{{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
+#{{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
 apiVersion: v1
 kind: Service
 metadata:
