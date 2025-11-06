@@ -94,5 +94,9 @@ spec:
     db: postgresql
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
   type: {{ .Values.postgresql.service.type }}
-{{- end }}
+  ports:
+    - name: {{ .Values.cm.name }}
+      port: {{ .Values.cm.port }}
+      targetPort: {{ .Values.cm.port }}
+#{{- end }}
 ---
