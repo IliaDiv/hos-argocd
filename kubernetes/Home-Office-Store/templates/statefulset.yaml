@@ -2,7 +2,7 @@
 ##############################################################################################
 # PostgreSQL StatefulSet
 ##############################################################################################
-#{{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
 apiVersion: apps/v1
 kind: StatefulSet 
 metadata:
@@ -44,4 +44,4 @@ spec:
               name: {{ .Values.secrets.name }}
               key: db_password
         {{- include "Home-Office-Store.postgresql.resources" . | nindent 8 }}
-#{{- end }}
+{{- end }}
