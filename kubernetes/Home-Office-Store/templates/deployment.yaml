@@ -46,7 +46,7 @@ spec:
             configMapKeyRef:
               name: {{ .Values.cm.name }}
               key: db_host
-        {{ -end }}
+        {{- end }}
         ###
         ### EKS
         {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
@@ -55,7 +55,7 @@ spec:
             secretKeyRef:
               name: postgres-endpoint
               key: db_host
-        {{ -end }}
+        {{- end }}
         ###
         - name: DB_PORT 
           valueFrom:

@@ -36,7 +36,7 @@ spec:
         path: kubernetes/Home-Office-Store
         helm:
           valueFiles:
-            - ../../environment/{{namespace}}/eks-values.yaml
+            - ../../environment/{{namespace}}/eks/values.yaml
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{namespace}}'
