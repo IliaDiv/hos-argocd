@@ -10,10 +10,10 @@ metadata:
   labels:
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
+  annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress/kubernetes.io/certificate-arn: {{ .Values.ingress.certARN }}
-  annotations:
+    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certARN }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
