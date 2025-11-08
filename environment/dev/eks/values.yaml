@@ -133,7 +133,7 @@ cm:
   db_host: postgresql-0.postgresql-svc
   backend_svc: /api
   n8n_webhook_url: http://n8n-svc:5678/webhook/chat
-  cors_origins: http://localhost,http://localhost:3000,http://frontend-svc:3000,http://localhost:80,http://frontend-svc
+  cors_origins: http://localhost,http://localhost:3000,http://frontend-svc:3000,http://localhost:80,http://frontend-svc,http://localhost:5000/api/
   webhook_url: http://n8n-svc:5678
   n8n_editor_base_url: http://localhost:5678
 
