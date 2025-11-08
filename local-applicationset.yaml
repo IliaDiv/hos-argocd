@@ -32,11 +32,14 @@ spec:
         - PruneLast=true # delete as the last option, after every change/add is done
       source:
         repoURL: https://github.com/IliaDiv/hos-argocd.git
-        targetRevision: HEAD
+        targetRevision: test
         path: kubernetes/Home-Office-Store
         helm:
+          parameters:
+          - name: secrets.data.open_ai_api_key
+            value: the-key-here
           valueFiles:
-            - ../../environment/{{namespace}}/local-values.yaml
+            - ../../environment/{{namespace}}/local/values.yaml
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{namespace}}'
