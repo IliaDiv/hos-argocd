@@ -27,6 +27,7 @@ spec:
         ports:
         - containerPort: {{ .Values.backend.flaskBackend.port }}
         env:
+        ### N8N
         - name: N8N_WEBHOOK_URL 
           valueFrom:
             configMapKeyRef:
@@ -37,11 +38,25 @@ spec:
             configMapKeyRef:
               name: {{ .Values.cm.name }}
               key: cors_origins
+        ### DB
+        ### LOCAL
+        {{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
         - name: DB_HOST
           valueFrom:
             configMapKeyRef:
               name: {{ .Values.cm.name }}
               key: db_host
+        {{- end }}
+        ###
+        ### EKS
+        {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: postgres-endpoint
+              key: db_host
+        {{- end }}
+        ###
         - name: DB_PORT 
           valueFrom:
             configMapKeyRef:
@@ -92,11 +107,25 @@ spec:
           done
           echo "Database is ready!"
         env:
+        ### DB
+        ### LOCAL
+        {{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
         - name: DB_HOST
           valueFrom:
             configMapKeyRef:
               name: {{ .Values.cm.name }}
               key: db_host
+        {{- end }}
+        ###
+        ### EKS
+        {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: postgres-endpoint
+              key: db_host
+        {{- end }}
+        ###
         - name: DB_PORT
           valueFrom:
             configMapKeyRef:

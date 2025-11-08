@@ -32,11 +32,11 @@ spec:
         - PruneLast=true # delete as the last option, after every change/add is done
       source:
         repoURL: https://github.com/IliaDiv/hos-argocd.git
-        targetRevision: HEAD
+        targetRevision: test
         path: kubernetes/Home-Office-Store
         helm:
           valueFiles:
-            - ../../environment/{{namespace}}/eks-values.yaml
+            - ../../environment/{{namespace}}/eks/values.yaml
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{namespace}}'

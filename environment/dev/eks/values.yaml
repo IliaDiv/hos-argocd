@@ -1,13 +1,9 @@
-##############################################################################################
-# Frontend
-##############################################################################################
-
 frontend:
   name: react-frontend
   reactFrontend:
     name: react-frontend
     image: irbis3/frontend
-    imageTag: 387c1f82f5eda979e8c5ee7c1556a3c2d43e62e3
+    imageTag: bc1383df67246c0360fbdc85b471b40d4abdd475
     port: 80
   resources:
     requests:
@@ -23,17 +19,12 @@ frontend:
       port: 80
       protocol: TCP
       targetPort: 80
-
-##############################################################################################
-# Backend
-##############################################################################################
-
 backend:
   name: flask-backend
   flaskBackend:
     name: flask-backend
     image: irbis3/backend
-    imageTag: 387c1f82f5eda979e8c5ee7c1556a3c2d43e62e3
+    imageTag: bc1383df67246c0360fbdc85b471b40d4abdd475
     port: 5000
   resources:
     requests:
@@ -49,17 +40,12 @@ backend:
       port: 5000
       protocol: TCP
       targetPort: 5000
-
-##############################################################################################
-# n8n
-##############################################################################################
-
 n8n:
   name: n8n
   n8n:
     name: n8n
     image: irbis3/n8n
-    imageTag: 387c1f82f5eda979e8c5ee7c1556a3c2d43e62e3
+    imageTag: bc1383df67246c0360fbdc85b471b40d4abdd475
     port: 5678
   resources:
     requests:
@@ -75,11 +61,6 @@ n8n:
       port: 5678
       protocol: TCP
       targetPort: 5678
-
-##############################################################################################
-# PostgreSQL
-##############################################################################################
-
 postgresql:
   name: postgresql
   replicas: 1
@@ -100,31 +81,21 @@ postgresql:
     type: ClusterIP
     clusterIP: None
     clusterIPs: None
-
-##############################################################################################
-# n8n-CM
-##############################################################################################
-
 n8nCm:
   envn8n:
     name: n8n-config
-    DB_TYPE: "postgresdb"
-    N8N_DEFAULT_BINARY_DATA_MODE: "filesystem"
-    N8N_DEFAULT_LOCALE: "en"
-    N8N_METRICS: "true"
-    N8N_METRICS_INCLUDE_DEFAULT_METRICS: "true"
-    N8N_METRICS_INCLUDE_CACHE_METRICS: "true"
-    N8N_METRICS_INCLUDE_MESSAGE_EVENT_BUS_METRICS: "true"
-    N8N_METRICS_INCLUDE_WORKFLOW_ID_LABEL: "true"
-    N8N_METRICS_INCLUDE_API_METHOD_LABEL: "true"
-    N8N_METRICS_INCLUDE_API_STATUS_CODE_LABEL: "true"
-    N8N_METRICS_QUEUE_METRICS_INTERVAL: "10"
-    N8N_DIAGNOSTICS_ENABLED: "true"
-
-##############################################################################################
-# CM
-##############################################################################################
-
+    DB_TYPE: postgresdb
+    N8N_DEFAULT_BINARY_DATA_MODE: filesystem
+    N8N_DEFAULT_LOCALE: en
+    N8N_METRICS: 'true'
+    N8N_METRICS_INCLUDE_DEFAULT_METRICS: 'true'
+    N8N_METRICS_INCLUDE_CACHE_METRICS: 'true'
+    N8N_METRICS_INCLUDE_MESSAGE_EVENT_BUS_METRICS: 'true'
+    N8N_METRICS_INCLUDE_WORKFLOW_ID_LABEL: 'true'
+    N8N_METRICS_INCLUDE_API_METHOD_LABEL: 'true'
+    N8N_METRICS_INCLUDE_API_STATUS_CODE_LABEL: 'true'
+    N8N_METRICS_QUEUE_METRICS_INTERVAL: '10'
+    N8N_DIAGNOSTICS_ENABLED: 'true'
 cm:
   name: general-config
   db_name: postgres
@@ -136,11 +107,6 @@ cm:
   cors_origins: http://localhost,http://localhost:3000,http://frontend-svc:3000,http://localhost:80,http://frontend-svc
   webhook_url: http://n8n-svc:5678
   n8n_editor_base_url: http://localhost:5678
-
-##############################################################################################
-# Secrets
-##############################################################################################
-
 secrets:
   name: general-secrets
   data:
@@ -149,11 +115,6 @@ secrets:
     n8n_api_key: n8n-api-key-12345
     n8n_encryption_key: your-encryption-key
     open_ai_api_key: $OPENAI_API_KEY
-
-##############################################################################################
-# Ingress
-##############################################################################################
-
 ingress:
   type: lbc
   name: main-ingress
@@ -171,18 +132,13 @@ ingress:
     n8nPaths:
       path: /webhook/chat
       pathType: Prefix
-
-##############################################################################################
-# Grafana
-##############################################################################################
-
 grafana:
   defaultDashboardsEnabled: false
   dashboardProviders:
     dashboardproviders.yaml:
       apiVersion: 1
       providers:
-        - name: 'default'
+        - name: default
           orgId: 1
           folder: ''
           type: file
@@ -190,61 +146,41 @@ grafana:
           editable: true
           options:
             path: /var/lib/grafana/dashboards/default
-
   dashboardsConfigMaps:
-    default: "grafana-hos-dashboard"
-
-##############################################################################################
-# Kubelet
-##############################################################################################
-
+    default: grafana-hos-dashboard
 kubelet:
   serviceMonitor:
-    interval: "30s" # Prometheus scrape interval
-
-##############################################################################################
-# PrometheusOperator
-##############################################################################################
-
+    interval: 30s
 prometheusOperator:
   serviceMonitor:
-    interval: "30s"
-
-##############################################################################################
-# Prometheus
-##############################################################################################
-
+    interval: 30s
 prometheus:
   spec:
     ruleSelector:
       matchLabels:
         prometheus: hos
-
-##############################################################################################
-# AlertManager
-##############################################################################################
-
 alertmanager:
   enabled: true
   config:
     route:
-      receiver: 'email' # default receiver
-      group_by: ['alertname'] # group name
-      group_wait: 10s # wait for potentially more alerts from the same group before sending the message
+      receiver: email
+      group_by:
+        - alertname
+      group_wait: 10s
       group_interval: 10s
-      repeat_interval: 1h # 1 hour cooldown
-      routes: # create more receivers here, the settings override the default receiver's settings
+      repeat_interval: 1h
+      routes:
         - match:
-            alertname: HighCPU_Throttling # CHANGE THIS (the name of the alert to match)
-          receiver: 'email' # alerts matching this will be sent to the reciever 'test'
-          repeat_interval: 5m # overrides parent's cooldown settings
+            alertname: HighCPU_Throttling
+          receiver: email
+          repeat_interval: 5m
     receivers:
       - name: email
         email_configs:
-          - to: 'example@gmail.com'         # recipient email
-            from: 'example@gmail.com'      # your Gmail address (sender)
-            smarthost: 'smtp.gmail.com:587'      # Gmail SMTP server + port
-            auth_username: 'example@gmail.com'
-            auth_password: 'longpassword'   # Gmail App Password, NOT your regular password
-            require_tls: true         # enforce TLS
-            text: "Alert {{ .CommonLabels.alertname }} fired on {{ .CommonLabels.instance }}!"
+          - to: example@gmail.com
+            from: example@gmail.com
+            smarthost: smtp.gmail.com:587
+            auth_username: example@gmail.com
+            auth_password: longpassword
+            require_tls: true
+            text: Alert {{ .CommonLabels.alertname }} fired on {{ .CommonLabels.instance }}!
