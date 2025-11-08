@@ -14,7 +14,7 @@ frontend:
       cpu: 500m
   service:
     name: frontend-svc
-    type: ClusterIP
+    type: NodePort
     ports:
       port: 80
       protocol: TCP
@@ -35,7 +35,7 @@ backend:
       cpu: 500m
   service:
     name: backend-svc
-    type: ClusterIP
+    type: NodePort
     ports:
       port: 5000
       protocol: TCP
@@ -56,7 +56,7 @@ n8n:
       cpu: 1000m
   service:
     name: n8n-svc
-    type: ClusterIP
+    type: NodePort
     ports:
       port: 5678
       protocol: TCP
