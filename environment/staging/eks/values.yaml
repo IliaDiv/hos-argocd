@@ -1,0 +1,171 @@
+frontend:
+  name: react-frontend
+  reactFrontend:
+    name: react-frontend
+    image: irbis3/frontend
+    imageTag: e5b3d582cdbc6da71f4e1ef0780cc7e2165931dc
+    port: 80
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+  service:
+    name: frontend-svc
+    type: NodePort
+    ports:
+      port: 80
+      protocol: TCP
+      targetPort: 80
+backend:
+  name: flask-backend
+  flaskBackend:
+    name: flask-backend
+    image: irbis3/backend
+    imageTag: e5b3d582cdbc6da71f4e1ef0780cc7e2165931dc
+    port: 5000
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+  service:
+    name: backend-svc
+    type: NodePort
+    ports:
+      port: 5000
+      protocol: TCP
+      targetPort: 5000
+n8n:
+  name: n8n
+  n8n:
+    name: n8n
+    image: irbis3/n8n
+    imageTag: e5b3d582cdbc6da71f4e1ef0780cc7e2165931dc
+    port: 5678
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+    limits:
+      memory: 1024Mi
+      cpu: 1000m
+  service:
+    name: n8n-svc
+    type: NodePort
+    ports:
+      port: 5678
+      protocol: TCP
+      targetPort: 5678
+
+##############################################################################################
+# n8n-CM
+##############################################################################################
+
+n8nCm:
+  envn8n:
+    name: n8n-config
+    DB_TYPE: postgresdb
+    N8N_DEFAULT_BINARY_DATA_MODE: filesystem
+    N8N_DEFAULT_LOCALE: en
+    N8N_METRICS: 'true'
+    N8N_METRICS_INCLUDE_DEFAULT_METRICS: 'true'
+    N8N_METRICS_INCLUDE_CACHE_METRICS: 'true'
+    N8N_METRICS_INCLUDE_MESSAGE_EVENT_BUS_METRICS: 'true'
+    N8N_METRICS_INCLUDE_WORKFLOW_ID_LABEL: 'true'
+    N8N_METRICS_INCLUDE_API_METHOD_LABEL: 'true'
+    N8N_METRICS_INCLUDE_API_STATUS_CODE_LABEL: 'true'
+    N8N_METRICS_QUEUE_METRICS_INTERVAL: '10'
+    N8N_DIAGNOSTICS_ENABLED: 'true'
+cm:
+  name: general-config
+  db_name: postgres
+  db_type: postgresdb
+  db_port: '5432'
+  db_host: postgresql-0.postgresql-svc
+  backend_svc: /api
+  n8n_webhook_url: http://n8n-svc:5678/webhook/chat
+  cors_origins: http://localhost,http://localhost:3000,http://frontend-svc:3000,http://localhost:80,http://frontend-svc
+  webhook_url: http://n8n-svc:5678
+  n8n_editor_base_url: http://localhost:5678
+secrets:
+  name: general-secrets
+  data:
+    db_user: psql_user
+    db_password: psql_password
+    n8n_api_key: n8n-api-key-12345
+    n8n_encryption_key: your-encryption-key
+    open_ai_api_key: $OPENAI_API_KEY
+ingress:
+  type: lbc
+  name: main-ingress
+  certARN: arn:aws:acm:us-east-1:337909746080:certificate/3c61e02a-58f5-41bd-86b4-24867f3d313b
+  enabled: true
+  className: alb
+  rules:
+    host: localhost
+    frontendPaths:
+      path: /
+      pathType: Prefix
+    backendPaths:
+      path: /api
+      pathType: Prefix
+    n8nPaths:
+      path: /webhook/chat
+      pathType: Prefix
+grafana:
+  defaultDashboardsEnabled: false
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: default
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+  dashboardsConfigMaps:
+    default: grafana-hos-dashboard
+kubelet:
+  serviceMonitor:
+    interval: 30s
+prometheusOperator:
+  serviceMonitor:
+    interval: 30s
+prometheus:
+  spec:
+    ruleSelector:
+      matchLabels:
+        prometheus: hos
+alertmanager:
+  enabled: true
+  config:
+    route:
+      receiver: email
+      group_by:
+        - alertname
+      group_wait: 10s
+      group_interval: 10s
+      repeat_interval: 1h
+      routes:
+        - match:
+            alertname: HighCPU_Throttling
+          receiver: email
+          repeat_interval: 5m
+    receivers:
+      - name: email
+        email_configs:
+          - to: example@gmail.com
+            from: example@gmail.com
+            smarthost: smtp.gmail.com:587
+            auth_username: example@gmail.com
+            auth_password: longpassword
+            require_tls: true
+            text: Alert {{ .CommonLabels.alertname }} fired on {{ .CommonLabels.instance }}!

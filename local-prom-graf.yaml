@@ -18,6 +18,7 @@ spec:
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
+    - ServerSideApply=true
     automated:
       prune: true
       selfHeal: true    # stops argocd from changing the resources if changes were made manually by the user 
