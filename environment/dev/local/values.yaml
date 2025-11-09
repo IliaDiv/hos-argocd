@@ -219,6 +219,7 @@ prometheusOperator:
 ##############################################################################################
 
 prometheus:
+  enabled: true
   spec:
     ruleSelector:
       matchLabels:
