@@ -191,6 +191,12 @@ grafana:
             path: /var/lib/grafana/dashboards/default
   dashboardsConfigMaps:
     default: grafana-hos-dashboard
+  database:
+    type: postgres
+    host: postgresql-0.postgresql-svc:5432
+    name: grafana
+    user: grafana
+    password: grafana_password
 
 ##############################################################################################
 # Kubelet

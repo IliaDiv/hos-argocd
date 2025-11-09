@@ -30,16 +30,23 @@ spec:
         - Validate=true # don't apply if doesn't validated
         - PrunePropagationPolicy=foreground # safety measure to delete EVERYTHING
         - PruneLast=true # delete as the last option, after every change/add is done
-      source:
-        repoURL: https://github.com/IliaDiv/hos-argocd.git
-        targetRevision: test
-        path: kubernetes/Home-Office-Store
-        helm:
-          parameters:
-          - name: secrets.data.open_ai_api_key
-            value: the-key-here
-          valueFiles:
-            - ../../environment/{{namespace}}/local/values.yaml
+      sources:
+        - repoURL: https://github.com/IliaDiv/hos-argocd.git
+          targetRevision: test
+          path: kubernetes/Home-Office-Store
+          helm:
+            parameters:
+            - name: secrets.data.open_ai_api_key
+              value: 
+            valueFiles:
+              - ../../environment/{{namespace}}/local/values.yaml
+
+        - repoURL: https://github.com/IliaDiv/hos-argocd.git
+          targetRevision: test
+          path: kubernetes/prometheus-stack
+          helm:
+            valueFiles:
+              - ../../environment/{{namespace}}/local/values.yaml
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{namespace}}'
