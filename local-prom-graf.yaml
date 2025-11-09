@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hos-argocd-monitoring
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/IliaDiv/hos-argocd.git
+    targetRevision: test
+    path: kubernetes/prometheus-stack
+    helm:
+      valueFiles:
+        - ../../environment/dev/local/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true    # stops argocd from changing the resources if changes were made manually by the user 
+      allowEmpty: true
