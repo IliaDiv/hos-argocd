@@ -194,7 +194,6 @@ metadata:
     app: n8n
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
 spec:
-  serviceAccountName: service-token-reader
   selector:
     matchLabels:
       app: n8n
@@ -205,6 +204,7 @@ spec:
         app: n8n
         {{- include "Home-Office-Store.labels" . | nindent 8 }}
     spec:
+      serviceAccountName: service-token-reader
       containers:
       - name: {{ .Values.n8n.n8n.name }}
         image: "{{ .Values.n8n.n8n.image }}:{{ .Values.n8n.n8n.imageTag }}"
