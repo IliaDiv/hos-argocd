@@ -282,7 +282,7 @@ spec:
           mountPath: "/mnt/secrets-store"
           readOnly: true
       volumes:
-      - name: secret-from-asm
+      - name: secret-from-aws
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
