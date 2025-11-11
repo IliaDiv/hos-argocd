@@ -194,6 +194,7 @@ metadata:
     app: n8n
     {{- include "Home-Office-Store.labels" . | nindent 4 }}
 spec:
+  serviceAccountName: service-token-reader
   selector:
     matchLabels:
       app: n8n
