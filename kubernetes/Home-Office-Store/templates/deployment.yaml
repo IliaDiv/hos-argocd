@@ -245,11 +245,15 @@ spec:
             secretKeyRef:
               name: {{ .Values.secrets.name }}
               key: n8n_encryption_key
+        ## LOCAL
+        {{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
         - name: OPENAI_API_KEY
           valueFrom:
             secretKeyRef:
               name: {{ .Values.secrets.name }}
               key: open_ai_api_key
+        {{- end}}
+        ##
         envFrom:
         - configMapRef:
             name: {{ .Values.n8nCm.envn8n.name }}
@@ -270,3 +274,19 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 30
+      ##
+      ## EKS
+      {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+        volumeMounts:
+        - name: secret-from-aws
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+      volumes:
+      - name: secret-from-asm
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "service-token"
+      {{- end}}
+      ##
