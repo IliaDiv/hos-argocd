@@ -252,7 +252,7 @@ spec:
         ###
         ### EKS
         {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
-        - name: DB_HOST
+        - name: DB_POSTGRESDB_HOST
           valueFrom:
             secretKeyRef:
               name: postgres-endpoint
@@ -294,7 +294,7 @@ spec:
         {{- include "Home-Office-Store.n8n.resources" . | nindent 8 }}
         livenessProbe:
           httpGet:
-            path: /
+            path: /healthz
             port: {{ .Values.n8n.n8n.port }}
           initialDelaySeconds: 60
           periodSeconds: 30
@@ -302,7 +302,7 @@ spec:
           failureThreshold: 3
         startupProbe:
           httpGet:
-            path: /
+            path: /healthz
             port: {{ .Values.n8n.n8n.port }}
           initialDelaySeconds: 30
           periodSeconds: 10
