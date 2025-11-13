@@ -22,7 +22,7 @@ spec:
         {{- include "Home-Office-Store.labels" . | nindent 8 }}
     spec:
       {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
-      serviceAccountName: service-token-reader
+      serviceAccountName: flask-service-token-reader
       {{- end }}
       containers:
       - name: {{ .Values.backend.flaskBackend.name }}
@@ -223,7 +223,7 @@ spec:
         {{- include "Home-Office-Store.labels" . | nindent 8 }}
     spec:
       {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
-      serviceAccountName: service-token-reader
+      serviceAccountName: n8n-service-token-reader
       {{- end }}
       containers:
       - name: {{ .Values.n8n.n8n.name }}
