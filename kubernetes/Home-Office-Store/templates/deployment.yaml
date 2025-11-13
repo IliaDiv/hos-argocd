@@ -100,6 +100,7 @@ spec:
             ##
       ## EKS
       {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+        volumeMounts:
         - name: flask-secrets
           mountPath: "/mnt/secrets-store/flask"
           readOnly: true
@@ -110,8 +111,7 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: "flask-service-token"
-      {{- end}}
-      ##
+      {{- end }}
       initContainers:
       - name: db-wait
         image: busybox:1.35
