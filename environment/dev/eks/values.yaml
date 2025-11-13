@@ -1,13 +1,9 @@
-##############################################################################################
-# Frontend
-##############################################################################################
-
 frontend:
   name: react-frontend
   reactFrontend:
     name: react-frontend
     image: irbis3/frontend
-    imageTag: 35c1ffbaab289cb14420ca758400d89b273196b3
+    imageTag: 05be244c86f422fa30b63addb1dad18bcdf15244
     port: 80
   resources:
     requests:
@@ -23,17 +19,12 @@ frontend:
       port: 80
       protocol: TCP
       targetPort: 80
-
-##############################################################################################
-# Backend
-##############################################################################################
-
 backend:
   name: flask-backend
   flaskBackend:
     name: flask-backend
     image: irbis3/backend
-    imageTag: 35c1ffbaab289cb14420ca758400d89b273196b3
+    imageTag: 05be244c86f422fa30b63addb1dad18bcdf15244
     port: 5000
   resources:
     requests:
@@ -49,17 +40,12 @@ backend:
       port: 5000
       protocol: TCP
       targetPort: 5000
-
-##############################################################################################
-# n8n
-##############################################################################################
-
 n8n:
   name: n8n
   n8n:
     name: n8n
     image: irbis3/n8n
-    imageTag: 35c1ffbaab289cb14420ca758400d89b273196b3
+    imageTag: 05be244c86f422fa30b63addb1dad18bcdf15244
     port: 5678
   resources:
     requests:
@@ -75,11 +61,6 @@ n8n:
       port: 5678
       protocol: TCP
       targetPort: 5678
-
-##############################################################################################
-# PostgreSQL
-##############################################################################################
-
 postgresql:
   name: postgresql
   replicas: 1
@@ -100,11 +81,6 @@ postgresql:
     type: ClusterIP
     clusterIP: None
     clusterIPs: None
-
-##############################################################################################
-# n8n-CM
-##############################################################################################
-
 n8nCm:
   envn8n:
     name: n8n-config
@@ -120,11 +96,6 @@ n8nCm:
     N8N_METRICS_INCLUDE_API_STATUS_CODE_LABEL: 'true'
     N8N_METRICS_QUEUE_METRICS_INTERVAL: '10'
     N8N_DIAGNOSTICS_ENABLED: 'true'
-
-##############################################################################################
-# CM
-##############################################################################################
-
 cm:
   name: general-config
   db_name: postgres
@@ -136,11 +107,6 @@ cm:
   cors_origins: http://localhost,http://localhost:3000,http://frontend-svc:3000,http://localhost:80,http://frontend-svc
   webhook_url: http://n8n-svc:5678
   n8n_editor_base_url: http://localhost:5678
-
-##############################################################################################
-# Secrets
-##############################################################################################
-
 secrets:
   name: general-secrets
   data:
@@ -149,19 +115,14 @@ secrets:
     n8n_api_key: n8n-api-key-12345
     n8n_encryption_key: your-encryption-key
     open_ai_api_key: $OPENAI_API_KEY
-
-##############################################################################################
-# Ingress
-##############################################################################################
-
 ingress:
   type: lbc
   name: main-ingress
-  certARN: arn:aws:acm:us-east-1:337909746080:certificate/3c61e02a-58f5-41bd-86b4-24867f3d313b
+  certARN: arn:aws:acm:us-east-1:337909746080:certificate/f18f4294-80b2-4322-ba30-314855addfd2
   enabled: true
   className: alb
   rules:
-    host: www.iliadiv.online
+    host: localhost
     frontendPaths:
       path: /
       pathType: Prefix
@@ -171,11 +132,6 @@ ingress:
     n8nPaths:
       path: /webhook/chat
       pathType: Prefix
-
-##############################################################################################
-# Grafana
-##############################################################################################
-
 grafana:
   defaultDashboardsEnabled: false
   dashboardProviders:
@@ -192,42 +148,17 @@ grafana:
             path: /var/lib/grafana/dashboards/default
   dashboardsConfigMaps:
     default: grafana-hos-dashboard
-
-##############################################################################################
-# Kubelet
-##############################################################################################
-
 kubelet:
   serviceMonitor:
     interval: 30s
 prometheusOperator:
   serviceMonitor:
     interval: 30s
-
-##############################################################################################
-# PrometheusOperator
-##############################################################################################
-
-prometheusOperator:
-  serviceMonitor:
-    interval: 30s
-  annotations: {} # disable excessive annotations, causes length errors
-
-##############################################################################################
-# Prometheus
-##############################################################################################
-
-
 prometheus:
   spec:
     ruleSelector:
       matchLabels:
         prometheus: hos
-
-##############################################################################################
-# AlertManager
-##############################################################################################
-
 alertmanager:
   enabled: true
   config:
