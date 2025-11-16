@@ -21,6 +21,9 @@ spec:
         app: backend
         {{- include "Home-Office-Store.labels" . | nindent 8 }}
     spec:
+      {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+      serviceAccountName: flask-service-token-reader
+      {{- end }}
       containers:
       - name: {{ .Values.backend.flaskBackend.name }}
         image: "{{ .Values.backend.flaskBackend.image }}:{{ .Values.backend.flaskBackend.imageTag }}"
@@ -46,6 +49,16 @@ spec:
             configMapKeyRef:
               name: {{ .Values.cm.name }}
               key: db_host
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.name }}
+              key: db_user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.name }}
+              key: db_password
         {{- end }}
         ###
         ### EKS
@@ -67,16 +80,6 @@ spec:
             configMapKeyRef:
               name: {{ .Values.cm.name }}
               key: db_name
-        - name: DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.secrets.name }}
-              key: db_user
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.secrets.name }}
-              key: db_password
         {{- include "Home-Office-Store.backend.resources" . | nindent 8 }}
         livenessProbe:
           httpGet:
@@ -94,6 +97,21 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 3
           failureThreshold: 30
+            ##
+      ## EKS
+      {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+        volumeMounts:
+        - name: flask-secrets
+          mountPath: "/mnt/secrets-store/flask"
+          readOnly: true
+      volumes:
+      - name: flask-secrets
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "flask-service-token"
+      {{- end }}
       initContainers:
       - name: db-wait
         image: busybox:1.35
@@ -204,27 +222,22 @@ spec:
         app: n8n
         {{- include "Home-Office-Store.labels" . | nindent 8 }}
     spec:
+      {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+      serviceAccountName: n8n-service-token-reader
+      {{- end }}
       containers:
       - name: {{ .Values.n8n.n8n.name }}
         image: "{{ .Values.n8n.n8n.image }}:{{ .Values.n8n.n8n.imageTag }}"
         ports:
         - containerPort: {{ .Values.n8n.n8n.port }}
         env:
+        ### LOCAL
+        {{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
         - name: DB_POSTGRESDB_HOST
           valueFrom:
             configMapKeyRef:
               name: {{ .Values.cm.name }}
               key: db_host
-        - name: DB_POSTGRESDB_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: {{ .Values.cm.name }}
-              key: db_port
-        - name: DB_POSTGRESDB_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              name: {{ .Values.cm.name }}
-              key: db_name
         - name: DB_POSTGRESDB_USER
           valueFrom:
             secretKeyRef:
@@ -235,6 +248,27 @@ spec:
             secretKeyRef:
               name: {{ .Values.secrets.name }}
               key: db_password
+        {{- end}}
+        ###
+        ### EKS
+        {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+        - name: DB_POSTGRESDB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: postgres-endpoint
+              key: db_host
+        {{- end }}
+        ###
+        - name: DB_POSTGRESDB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.cm.name }}
+              key: db_name
+        - name: DB_POSTGRESDB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.cm.name }}
+              key: db_port
         - name: N8N_API_KEY
           valueFrom:
             secretKeyRef:
@@ -245,11 +279,15 @@ spec:
             secretKeyRef:
               name: {{ .Values.secrets.name }}
               key: n8n_encryption_key
+        ## LOCAL
+        {{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
         - name: OPENAI_API_KEY
           valueFrom:
             secretKeyRef:
               name: {{ .Values.secrets.name }}
               key: open_ai_api_key
+        {{- end}}
+        ##
         envFrom:
         - configMapRef:
             name: {{ .Values.n8nCm.envn8n.name }}
@@ -270,3 +308,28 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 30
+      ##
+      ## EKS
+      {{- if and .Values.ingress.enabled (eq .Values.ingress.type "lbc") }}
+        volumeMounts:
+        - name: n8n-secrets
+          mountPath: "/mnt/secrets-store/n8n"
+          readOnly: true
+        - name: flask-secrets
+          mountPath: "/mnt/secrets-store/flask"
+          readOnly: true
+      volumes:
+      - name: n8n-secrets
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "n8n-service-token"
+      - name: flask-secrets
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "flask-service-token"
+      {{- end}}
+      ##

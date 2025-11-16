@@ -23,7 +23,7 @@ spec:
       syncPolicy:
         automated:
           prune: true # delete if a resource was deleted
-          selfHeal: true
+          selfHeal: false
           allowEmpty: false # don't allow empty resources
         syncOptions:
         - CreateNamespace=true

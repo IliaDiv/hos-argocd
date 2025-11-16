@@ -26,8 +26,8 @@ jobs:
         with:
           valueFile: 'environment/dev/local/values.yaml'
           branch: test
-          targetBranch: main
-          createPR: 'true'
+          targetBranch: test
+          createPR: 'false'
           token: ${{ secrets.PAT }}
           description: Update All Images
           message: 'Update All Images' 
@@ -43,8 +43,8 @@ jobs:
         with:
           valueFile: 'environment/dev/eks/values.yaml'
           branch: test
-          targetBranch: main
-          createPR: 'true'
+          targetBranch: test
+          createPR: 'false'
           token: ${{ secrets.PAT }}
           description: Update All Images
           message: 'Update All Images' 

@@ -3,9 +3,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: backend-service-monitor
-  namespace: monitoring
+  namespace: {{ template "kube-prometheus-stack.namespace" . }}
   labels:
-    release: prometheus-stack
+    release: {{ $.Release.Name | quote }}
 spec:
   selector:
     matchLabels:
@@ -24,9 +24,9 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: n8n-service-monitor
-  namespace: monitoring
+  namespace: {{ template "kube-prometheus-stack.namespace" . }}
   labels:
-    release: prometheus-stack
+    release: {{ $.Release.Name | quote }}
 spec:
   selector:
     matchLabels:
