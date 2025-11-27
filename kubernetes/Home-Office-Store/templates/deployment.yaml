@@ -258,6 +258,10 @@ spec:
               name: postgres-endpoint
               key: db_host
         {{- end }}
+        - name: DB_POSTGRESDB_SSL_ENABLED
+          value: "true"
+        - name: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED  
+          value: "false"
         ###
         - name: DB_POSTGRESDB_DATABASE
           valueFrom:
@@ -279,10 +283,6 @@ spec:
             secretKeyRef:
               name: {{ .Values.secrets.name }}
               key: n8n_encryption_key
-        - name: DB_POSTGRESDB_SSL_ENABLED
-          value: "true"
-        - name: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED  
-          value: "false"
         ## LOCAL
         {{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik") }}
         - name: OPENAI_API_KEY
