@@ -319,9 +319,6 @@ spec:
         - name: n8n-secrets
           mountPath: "/mnt/secrets-store/n8n"
           readOnly: true
-        - name: flask-secrets
-          mountPath: "/mnt/secrets-store/flask"
-          readOnly: true
       volumes:
       - name: n8n-secrets
         csi:
@@ -329,11 +326,5 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: "n8n-service-token"
-      - name: flask-secrets
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: "flask-service-token"
       {{- end}}
       ##
