@@ -122,7 +122,7 @@ ingress:
   enabled: true
   className: alb
   rules:
-    host: localhost
+    host: www.iliadiv.online
     frontendPaths:
       path: /
       pathType: Prefix
