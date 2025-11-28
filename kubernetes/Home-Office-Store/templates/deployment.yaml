@@ -263,6 +263,8 @@ spec:
           value: "false"
         {{- end }}
         ###
+        - name: ALLOW_UNAUTHORIZED
+          value: {{ .Values.n8n.unathorized }}
         - name: DB_POSTGRESDB_DATABASE
           valueFrom:
             configMapKeyRef:
