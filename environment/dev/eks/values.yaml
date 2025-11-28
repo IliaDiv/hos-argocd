@@ -3,7 +3,7 @@ frontend:
   reactFrontend:
     name: react-frontend
     image: irbis3/frontend
-    imageTag: 462b46fdddec6a2c6be2fcf520dba207a0a33a41
+    imageTag: 398eaca12f474641333b9a89c57bdf64ae932f6a
     port: 80
   resources:
     requests:
@@ -24,7 +24,7 @@ backend:
   flaskBackend:
     name: flask-backend
     image: irbis3/backend
-    imageTag: 462b46fdddec6a2c6be2fcf520dba207a0a33a41
+    imageTag: 398eaca12f474641333b9a89c57bdf64ae932f6a
     port: 5000
   resources:
     requests:
@@ -45,9 +45,8 @@ n8n:
   n8n:
     name: n8n
     image: irbis3/n8n
-    imageTag: 462b46fdddec6a2c6be2fcf520dba207a0a33a41
+    imageTag: 398eaca12f474641333b9a89c57bdf64ae932f6a
     port: 5678
-    unathorized: true
   resources:
     requests:
       memory: 512Mi
@@ -119,7 +118,7 @@ secrets:
 ingress:
   type: lbc
   name: main-ingress
-  certARN: arn:aws:acm:us-east-1:337909746080:certificate/3c61e02a-58f5-41bd-86b4-24867f3d313b
+  certARN: arn:aws:acm:us-east-1:337909746080:certificate/f18f4294-80b2-4322-ba30-314855addfd2
   enabled: true
   className: alb
   rules:
