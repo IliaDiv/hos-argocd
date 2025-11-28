@@ -47,6 +47,7 @@ n8n:
     image: irbis3/n8n
     imageTag: 398eaca12f474641333b9a89c57bdf64ae932f6a
     port: 5678
+    unathorized: false
   resources:
     requests:
       memory: 512Mi
